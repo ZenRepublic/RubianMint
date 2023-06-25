@@ -112,7 +112,7 @@ export default function Home() {
         signature: txid,
       })
 
-      setFormMessage("Minted successfully!")
+      setFormMessage("Minted successfully!  ")
     } catch (e: any) {
       const msg = fromTxError(e)
 
