@@ -40,7 +40,7 @@ const Wallet = ({ children }: { children: React.ReactChild }) => {
   return (
     <ConnectionProvider
       endpoint={endpoint}
-      config={{ commitment: "confirmed " }}
+      config={{ commitment: "confirmed" }}
     >
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
