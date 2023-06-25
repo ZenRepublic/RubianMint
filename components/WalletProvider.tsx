@@ -15,9 +15,9 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
 require("@solana/wallet-adapter-react-ui/styles.css")
 
 const Wallet = ({ children }: { children: React.ReactChild }) => {
-  // if (!process.env.NEXT_PUBLIC_RPC_ENDPOINT) throw new Error("Missing RPC URL")
+  if (!process.env.NEXT_PUBLIC_RPC_ENDPOINT) throw new Error("Missing RPC URL")
 
-  const endpoint = "https://lingering-old-forest.solana-devnet.quiknode.pro/b117971e16b44a82c492776a0d5f6863a0d20993/"
+  const endpoint = process.env.NEXT_PUBLIC_RPC_ENDPOINT;
 
   const wallets = useMemo(
     () => [
