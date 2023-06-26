@@ -211,7 +211,7 @@ export default function Home() {
                 {/* <span style={{ fontSize: "11px" }}>512/1024</span> */}
               </div>
               <button disabled={!publicKey || isLoading} onClick={handleMintV2}>
-                {isLoading ? "Minting your NFT..." : "Mint"}
+                {isLoading ? "Minting your NFT..." : "Mint Now!"}
               </button>
               <WalletMultiButton
                 style={{
