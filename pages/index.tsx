@@ -10,7 +10,7 @@ import {
   PublicKey,
   Sft,
   SftWithToken,
-  walletAdapterIdentity,
+  walletAdapterIdentity
 } from "@metaplex-foundation/js"
 import { Keypair, Transaction } from "@solana/web3.js"
 
@@ -19,6 +19,20 @@ import {
   mintV2Instruction,
 } from "@/utils/mintV2"
 import { fromTxError } from "@/utils/errors"
+import {
+  KeypairSigner,
+  TransactionBuilder,
+  publicKey,
+  Umi,
+  signAllTransactions,
+} from "@metaplex-foundation/umi";
+import base58 from "bs58";
+import { createTokenMintTxs,createOpenMintTxs } from "@/utils/candymachine"
+import { createSplAssociatedTokenProgram, createSplTokenProgram } from "@metaplex-foundation/mpl-toolbox"
+import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
+import { fetchCandyMachine, getMplCandyMachineCoreProgram, mplCandyMachine } from "@metaplex-foundation/mpl-candy-machine"
+import { walletAdapterIdentity as Umidapter } from "@metaplex-foundation/umi-signer-wallet-adapters"
+
 
 export default function Home() {
   const wallet = useWallet()
@@ -38,11 +52,19 @@ export default function Home() {
         if (!process.env.NEXT_PUBLIC_CANDY_MACHINE_ID) {
           throw new Error("Please provide a candy machine id")
         }
+
+        const umi = createUmi(connection.rpcEndpoint);
+        umi.use(Umidapter(wallet));
+        umi.use(mplCandyMachine());
+        umi.programs.add(getMplCandyMachineCoreProgram(umi));
+        umi.programs.add(createSplAssociatedTokenProgram());
+        umi.programs.add(createSplTokenProgram());
+
         const metaplex = new Metaplex(connection).use(
           walletAdapterIdentity(wallet)
         )
         setMetaplex(metaplex)
-
+        
         const candyMachine = await metaplex.candyMachines().findByAddress({
           address: new PublicKey(process.env.NEXT_PUBLIC_CANDY_MACHINE_ID),
         })
@@ -61,56 +83,156 @@ export default function Home() {
   }, [wallet, connection])
 
   /** Mints NFTs through a Candy Machine using Candy Guards */
-  const handleMintV2 = async () => {
-    if (!metaplex || !candyMachine || !publicKey || !candyMachine.candyGuard) {
-      if (!candyMachine?.candyGuard)
-        throw new Error(
-          "This app only works with Candy Guards. Please setup your Guards through Sugar."
-        )
+  // const handleMintV2 = async () => {
+  //   if (!metaplex || !candyMachine || !publicKey || !candyMachine.candyGuard) {
+  //     if (!candyMachine?.candyGuard)
+  //       throw new Error(
+  //         "This app only works with Candy Guards. Please setup your Guards through Sugar."
+  //       )
 
-      throw new Error(
-        "Couldn't find the Candy Machine or the connection is not defined."
-      )
-    }
+  //     throw new Error(
+  //       "Couldn't find the Candy Machine or the connection is not defined."
+  //     )
+  //   }
+
+  //   try {
+  //     setIsLoading(true)
+
+  //     const { remainingAccounts, additionalIxs } =
+  //       getRemainingAccountsForCandyGuard(candyMachine, publicKey)
+
+  //     const mint = Keypair.generate()
+  //     const { instructions } = await mintV2Instruction(
+  //       candyMachine.candyGuard?.address,
+  //       candyMachine.address,
+  //       publicKey,
+  //       publicKey,
+  //       mint,
+  //       connection,
+  //       metaplex,
+  //       remainingAccounts
+  //     )
+
+  //     const tx = new Transaction()
+
+  //     if (additionalIxs?.length) {
+  //       tx.add(...additionalIxs)
+  //     }
+
+  //     tx.add(...instructions)
+
+  //     tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
+
+  //     const txid = await wallet.sendTransaction(tx, connection, {
+  //       signers: [mint],
+  //     })
+
+  //     const latest = await connection.getLatestBlockhash()
+  //     await connection.confirmTransaction({
+  //       blockhash: latest.blockhash,
+  //       lastValidBlockHeight: latest.lastValidBlockHeight,
+  //       signature: txid,
+  //     })
+
+  //     setFormMessage("Minted successfully!  ")
+  //   } catch (e: any) {
+  //     const msg = fromTxError(e)
+
+  //     if (msg) {
+  //       setFormMessage(msg.message)
+  //     } else {
+  //       const msg = e.message || e.toString()
+  //       setFormMessage(msg)
+  //     }
+  //   } finally {
+  //     setIsLoading(false)
+
+  //     setTimeout(() => {
+  //       setFormMessage(null)
+  //     }, 5000)
+  //   }
+  // }
+
+   /** Mints NFTs through a Candy Machine using Candy Guards */
+   const handleOpenMintV2 = async () => {
+    // if (!metaplex || !candyMachine || !publicKey || !candyMachine.candyGuard) {
+    //   if (!candyMachine?.candyGuard)
+    //     throw new Error(
+    //       "This app only works with Candy Guards. Please setup your Guards through Sugar."
+    //     )
+
+    //   throw new Error(
+    //     "Couldn't find the Candy Machine or the connection is not defined."
+    //   )
+    // }
 
     try {
       setIsLoading(true)
 
-      const { remainingAccounts, additionalIxs } =
-        getRemainingAccountsForCandyGuard(candyMachine, publicKey)
+      const umi = createUmi(connection.rpcEndpoint);
+      umi.use(Umidapter(wallet));
+      umi.use(mplCandyMachine());
+      umi.programs.add(getMplCandyMachineCoreProgram(umi));
+      umi.programs.add(createSplAssociatedTokenProgram());
+      umi.programs.add(createSplTokenProgram());
+  
+      const transactions = await createOpenMintTxs(umi);
+  
+      const sigs = await sendTransactions(umi, transactions);
+  
+      await confirmTransactions(umi, sigs);
+  
+      console.log(base58Signature(sigs[0]));
 
-      const mint = Keypair.generate()
-      const { instructions } = await mintV2Instruction(
-        candyMachine.candyGuard?.address,
-        candyMachine.address,
-        publicKey,
-        publicKey,
-        mint,
-        connection,
-        metaplex,
-        remainingAccounts
-      )
+      setFormMessage("Minted successfully!  ")
+    } catch (e: any) {
+      const msg = fromTxError(e)
 
-      const tx = new Transaction()
-
-      if (additionalIxs?.length) {
-        tx.add(...additionalIxs)
+      if (msg) {
+        setFormMessage(msg.message)
+      } else {
+        const msg = e.message || e.toString()
+        setFormMessage(msg)
       }
+    } finally {
+      setIsLoading(false)
 
-      tx.add(...instructions)
+      setTimeout(() => {
+        setFormMessage(null)
+      }, 5000)
+    }
+  }
 
-      tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash
+  /** Mints NFTs through a Candy Machine using Candy Guards */
+  const handleTokenMintV2 = async () => {
+    // if (!metaplex || !candyMachine || !publicKey || !candyMachine.candyGuard) {
+    //   if (!candyMachine?.candyGuard)
+    //     throw new Error(
+    //       "This app only works with Candy Guards. Please setup your Guards through Sugar."
+    //     )
 
-      const txid = await wallet.sendTransaction(tx, connection, {
-        signers: [mint],
-      })
+    //   throw new Error(
+    //     "Couldn't find the Candy Machine or the connection is not defined."
+    //   )
+    // }
 
-      const latest = await connection.getLatestBlockhash()
-      await connection.confirmTransaction({
-        blockhash: latest.blockhash,
-        lastValidBlockHeight: latest.lastValidBlockHeight,
-        signature: txid,
-      })
+    try {
+      setIsLoading(true)
+
+      const umi = createUmi(connection.rpcEndpoint);
+      umi.use(Umidapter(wallet));
+      umi.use(mplCandyMachine());
+      umi.programs.add(getMplCandyMachineCoreProgram(umi));
+      umi.programs.add(createSplAssociatedTokenProgram());
+      umi.programs.add(createSplTokenProgram());
+  
+      const transactions = await createTokenMintTxs(umi);
+      console.log(transactions[0]);
+      const sigs = await sendTransactions(umi, transactions);
+      console.log(sigs[0]);
+      await confirmTransactions(umi, sigs);
+  
+      console.log(base58Signature(sigs[0]));
 
       setFormMessage("Minted successfully!  ")
     } catch (e: any) {
@@ -136,14 +258,14 @@ export default function Home() {
       ? Number(candyMachine.candyGuard?.guards.solPayment?.amount.basisPoints) /
           1e9 +
         " SOL"
-      : "1 Mint Voucher"
+      : "Thanks for support!"
     : "..."
 
   return (
     <>
       <Head>
         <title>Rubians</title>
-        <meta name="description" content="Rubians are inhabitants of Ruby Planet, the smallest and hottest planet in Zen Republic. Having automated most of the labour, they strive to entertain the web3 ecosystem with innovative games and utilities!" />
+        <meta name="description" content="Rubians are inhabitants of Ruby Planet, the smallest and hottest planet in Zen Republic. They are entertainers, who hold the keys of Zen Republic web3 games." />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -197,7 +319,7 @@ export default function Home() {
                   justifyContent: "space-between",
                 }}
               >
-                <span>Public</span>
+                <span>Live</span>
                 <b>{cost}</b>
               </div>
               <div
@@ -207,11 +329,15 @@ export default function Home() {
                   marginBottom: "16px",
                 }}
               >
-                <span style={{ fontSize: "11px" }}>Live</span>
+                <span style={{ fontSize: "11px" }}>Closes July 31st</span>
                 {/* <span style={{ fontSize: "11px" }}>512/1024</span> */}
               </div>
-              <button disabled={!publicKey || isLoading} onClick={handleMintV2}>
-                {isLoading ? "Minting your NFT..." : "Mint Now!"}
+              <button disabled={!publicKey || isLoading} onClick={handleTokenMintV2}>
+                {isLoading ? "Minting your NFT..." : "Mint with Voucher"}
+              </button>
+              <br></br>
+              <button disabled={!publicKey || isLoading} onClick={handleOpenMintV2}>
+                {isLoading ? "Minting your NFT..." : "Mint for 8 SOL"}
               </button>
               <WalletMultiButton
                 style={{
@@ -239,4 +365,57 @@ export default function Home() {
       </main>
     </>
   )
+
+  
 }
+
+export const sendTransactions = async (
+  umi: Umi,
+  transactions: { tx: TransactionBuilder; mint: KeypairSigner }[]
+) => {
+  const builtTxs = await Promise.all(
+    transactions.map(async (tx) => {
+      return {
+        tx: await tx.tx.buildWithLatestBlockhash(umi),
+        mint: tx.mint,
+      };
+    })
+  );
+
+  const signedTransactions = await signAllTransactions(
+    builtTxs.map((tx) => ({
+      transaction: tx.tx,
+      signers: [umi.identity, tx.mint],
+    }))
+  );
+
+  const sigs = await Promise.all(
+    signedTransactions.map((tx) =>
+      umi.rpc.sendTransaction(tx, { skipPreflight: true })
+    )
+  );
+
+  return sigs;
+};
+
+export const confirmTransactions = async (
+  umi: Umi,
+  signatures: Uint8Array[]
+) => {
+  const confirmations = await Promise.all(
+    signatures.map(async (sig) =>
+      umi.rpc.confirmTransaction(sig, {
+        strategy: {
+          type: "blockhash",
+          ...(await umi.rpc.getLatestBlockhash()),
+        },
+        commitment: "finalized",
+      })
+    )
+  );
+  return confirmations;
+};
+
+export const base58Signature = (sig: Uint8Array) => {
+  return base58.encode(sig);
+};
