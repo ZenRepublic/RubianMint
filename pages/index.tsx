@@ -258,7 +258,7 @@ export default function Home() {
       ? Number(candyMachine.candyGuard?.guards.solPayment?.amount.basisPoints) /
           1e9 +
         " SOL"
-      : "Thanks for support!"
+      : "Price: 8 SOL"
     : "..."
 
   return (
@@ -332,12 +332,12 @@ export default function Home() {
                 <span style={{ fontSize: "11px" }}>Closes July 31st</span>
                 {/* <span style={{ fontSize: "11px" }}>512/1024</span> */}
               </div>
-              <button disabled={!publicKey || isLoading} onClick={handleTokenMintV2}>
-                {isLoading ? "Minting your NFT..." : "Mint with Voucher"}
+              <button disabled={!publicKey || isLoading} onClick={handleOpenMintV2}>
+                {isLoading ? "Minting your NFT..." : "Mint"}
               </button>
               <br></br>
-              <button disabled={!publicKey || isLoading} onClick={handleOpenMintV2}>
-                {isLoading ? "Minting your NFT..." : "Mint for 8 SOL"}
+              <button disabled={!publicKey || isLoading} onClick={handleTokenMintV2}>
+                {isLoading ? "Minting your NFT..." : "Use Voucher"}
               </button>
               <WalletMultiButton
                 style={{
