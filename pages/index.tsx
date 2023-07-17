@@ -258,7 +258,7 @@ export default function Home() {
       ? Number(candyMachine.candyGuard?.guards.solPayment?.amount.basisPoints) /
           1e9 +
         " SOL"
-      : "Price: 8 SOL"
+      : "Price: 5 SOL"
     : "..."
 
   return (
@@ -329,7 +329,7 @@ export default function Home() {
                   marginBottom: "16px",
                 }}
               >
-                <span style={{ fontSize: "11px" }}>Closes July 31st</span>
+                <span style={{ fontSize: "11px" }}>Thanks for believing in us!</span>
                 {/* <span style={{ fontSize: "11px" }}>512/1024</span> */}
               </div>
               <button disabled={!publicKey || isLoading} onClick={handleOpenMintV2}>
