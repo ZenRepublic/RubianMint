@@ -10,9 +10,9 @@ body {
   color: #fdf4e7;
   font-size: 15px;
   line-height: 1.45;
-  background-image: url('squarebackground.png');
+  background-image: url('rubypattern.png');
   background-repeat: repeat; 
-  background-size: 900px;
+  background-size: 150px;
 }
 
 h1,

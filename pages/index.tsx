@@ -292,7 +292,7 @@ export default function Home() {
 
   const completed = (minted / total) * 100;
 
-  const label = `Total minted: ${minted} / ${total}`
+  const label = `${minted} / ${total} Minted`
   return (
     <>
       <Head>
@@ -312,8 +312,9 @@ export default function Home() {
         <div
           style={{
             display: "flex",
+            flexDirection: "column",// Updated to column for mobile
             gap: "32px",
-            alignItems: "flex-start",
+            alignItems: "center",// Updated to center for mobile
           }}
         >
           <img
@@ -340,11 +341,10 @@ export default function Home() {
               More about Rubians <a href="https://zenwiki.gitbook.io/zen-republic-wiki/nft-collections/rubians" style={{ color: "#007bff", textDecoration: "underline" }}>here</a>
             </p>
 
-            <br></br>
-            <p style={{textAlign: "center"}}>
+            {/* <p style={{textAlign: "center"}}>
               {label}
             </p>
-            <ProgressBar labelAlignment="center" customLabelStyles={{display: "none"}} completed={completed} />
+            <ProgressBar labelAlignment="center" customLabelStyles={{display: "none"}} completed={completed} /> */}
 
             <div
               style={{
@@ -361,7 +361,7 @@ export default function Home() {
                   justifyContent: "space-between",
                 }}
               >
-                <span>Join Now!</span>
+                <span>{label}</span>
                 <b>{cost}</b>
               </div>
               <div
@@ -371,7 +371,7 @@ export default function Home() {
                   marginBottom: "16px",
                 }}
               >
-                <span style={{ fontSize: "11px" }}>Royalties at 100% until mint closes, then reduced to 4.2%</span>
+                <span style={{ fontSize: "11px" }}>100% royalties, reduced to 4.2% after mint close</span>
                 {/* <span style={{ fontSize: "11px" }}>512/1024</span> */}
               </div>
               <button disabled={!publicKey || isLoading} onClick={handleOpenMintV2}>
@@ -404,6 +404,7 @@ export default function Home() {
             </div>
           </div>
         </div>
+        
       </main>
     </>
   )
