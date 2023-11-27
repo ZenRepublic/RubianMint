@@ -258,14 +258,14 @@ export default function Home() {
       ? Number(candyMachine.candyGuard?.guards.solPayment?.amount.basisPoints) /
           1e9 +
         " SOL"
-      : "Price: 5 SOL"
+      : "Price: 2.19 SOL"
     : "..."
 
   return (
     <>
       <Head>
-        <title>Rubians</title>
-        <meta name="description" content="Rubians are inhabitants of Ruby Planet, the smallest and hottest planet in Zen Republic. They are entertainers, who hold the keys of Zen Republic web3 games." />
+        <title>Rubians by Zen Republic</title>
+        <meta name="description" content="Rubians are 720 fun and creative citizens of Ruby Planet, shaping the culture of web3" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -286,7 +286,8 @@ export default function Home() {
         >
           <img
             style={{ maxWidth: "396px", borderRadius: "8px" }}
-            src={collection?.json?.image}
+            // src={collection?.json?.image}
+            src="/concept.png"
           />
           <div
             style={{
@@ -302,6 +303,9 @@ export default function Home() {
             <h1>{collection?.name}</h1>
             <p style={{ color: "#807a82", marginBottom: "32px" }}>
               {collection?.json?.description}
+            </p>
+            <p style={{ color: "#807a82", marginBottom: "32px" }}>
+              More about Rubians <a href="https://zenwiki.gitbook.io/zen-republic-wiki/nft-collections/rubians" style={{ color: "#007bff", textDecoration: "underline" }}>here</a>
             </p>
 
             <div
@@ -319,7 +323,7 @@ export default function Home() {
                   justifyContent: "space-between",
                 }}
               >
-                <span>Live</span>
+                <span>Join Now!</span>
                 <b>{cost}</b>
               </div>
               <div
@@ -329,15 +333,15 @@ export default function Home() {
                   marginBottom: "16px",
                 }}
               >
-                <span style={{ fontSize: "11px" }}>Thanks for believing in us!</span>
+                <span style={{ fontSize: "11px" }}>Royalties at 100% until mint closes, then reduced to 4.2%</span>
                 {/* <span style={{ fontSize: "11px" }}>512/1024</span> */}
               </div>
               <button disabled={!publicKey || isLoading} onClick={handleOpenMintV2}>
-                {isLoading ? "Minting your NFT..." : "Mint"}
+                {isLoading ? "Minting Rubian..." : "Mint"}
               </button>
               <br></br>
               <button disabled={!publicKey || isLoading} onClick={handleTokenMintV2}>
-                {isLoading ? "Minting your NFT..." : "Use Voucher"}
+                {isLoading ? "Minting Rubian..." : "Use Voucher (Free)"}
               </button>
               <WalletMultiButton
                 style={{
