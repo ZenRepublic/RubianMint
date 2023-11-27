@@ -1,6 +1,7 @@
 import Head from "next/head"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
 import { useConnection, useWallet } from "@solana/wallet-adapter-react"
+import ProgressBar from "@ramonak/react-progress-bar";
 import { useEffect, useState } from "react"
 import {
   CandyMachine,
@@ -306,6 +307,13 @@ export default function Home() {
             </p>
             <p style={{ color: "#807a82", marginBottom: "32px" }}>
               More about Rubians <a href="https://zenwiki.gitbook.io/zen-republic-wiki/nft-collections/rubians" style={{ color: "#007bff", textDecoration: "underline" }}>here</a>
+            </p>
+            <br></br>
+            <p>
+              {/* candyMachine.data.itemsAvailable; // Total number of NFTs available.
+              candyMachine.itemsRedeemed; // Number of NFTs minted. */}
+
+              <ProgressBar customLabel="total sold" completed={60} />
             </p>
 
             <div
