@@ -1,7 +1,6 @@
 import Head from "next/head"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
 import { useConnection, useWallet } from "@solana/wallet-adapter-react"
-import ProgressBar from "@ramonak/react-progress-bar";
 import { useEffect, useState } from "react"
 import {
   CandyMachine,
@@ -262,10 +261,38 @@ export default function Home() {
       : "Price: 2.19 SOL"
     : "..."
 
-  const totalRubians = 1000;
-  const soldRubians = 1000;
-  const label = "JSX"
+    // const { data } = candyMachine ? candyMachine : ;
 
+  const itemsMinted = (candyMachine: any) => {
+    if (!candyMachine) {
+      return 0;
+    }
+
+    const { itemsMinted } = candyMachine;
+    const { words } = itemsMinted;
+    const [total] = words;
+
+    return parseInt(total);
+  };
+
+  const totalItems = (candyMachine: any) => {
+    if (!candyMachine) {
+      return 0;
+    }
+
+    const { itemsAvailable } = candyMachine;
+    const { words } = itemsAvailable;
+    const [total] = words;
+
+    return parseInt(total);
+  };
+
+  const minted = itemsMinted(candyMachine);
+  const total = totalItems(candyMachine);
+
+  const completed = (minted / total) * 100;
+
+  const label = `Total minted: ${minted} / ${total}`
   return (
     <>
       <Head>
@@ -314,12 +341,10 @@ export default function Home() {
             </p>
 
             <br></br>
-            <p>
-              {/* candyMachine.data.itemsAvailable; // Total number of NFTs available.
-              candyMachine.itemsRedeemed; // Number of NFTs minted. */}
-
-              <ProgressBar customLabel={label} completed={60} />
+            <p style={{textAlign: "center"}}>
+              {label}
             </p>
+            <ProgressBar labelAlignment="center" customLabelStyles={{display: "none"}} completed={completed} />
 
             <div
               style={{
