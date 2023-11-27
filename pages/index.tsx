@@ -33,7 +33,7 @@ import { createSplAssociatedTokenProgram, createSplTokenProgram } from "@metaple
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { fetchCandyMachine, getMplCandyMachineCoreProgram, mplCandyMachine } from "@metaplex-foundation/mpl-candy-machine"
 import { walletAdapterIdentity as Umidapter } from "@metaplex-foundation/umi-signer-wallet-adapters"
-
+import ProgressBar from "@ramonak/react-progress-bar";
 
 export default function Home() {
   const wallet = useWallet()
@@ -262,6 +262,10 @@ export default function Home() {
       : "Price: 2.19 SOL"
     : "..."
 
+  const totalRubians = 1000;
+  const soldRubians = 1000;
+  const label = "JSX"
+
   return (
     <>
       <Head>
@@ -308,12 +312,13 @@ export default function Home() {
             <p style={{ color: "#807a82", marginBottom: "32px" }}>
               More about Rubians <a href="https://zenwiki.gitbook.io/zen-republic-wiki/nft-collections/rubians" style={{ color: "#007bff", textDecoration: "underline" }}>here</a>
             </p>
+
             <br></br>
             <p>
               {/* candyMachine.data.itemsAvailable; // Total number of NFTs available.
               candyMachine.itemsRedeemed; // Number of NFTs minted. */}
 
-              <ProgressBar customLabel="total sold" completed={60} />
+              <ProgressBar customLabel={label} completed={60} />
             </p>
 
             <div
