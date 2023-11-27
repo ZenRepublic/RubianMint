@@ -1,7 +1,6 @@
 import Head from "next/head"
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
 import { useConnection, useWallet } from "@solana/wallet-adapter-react"
-import ProgressBar from "@ramonak/react-progress-bar";
 import { useEffect, useState } from "react"
 import {
   CandyMachine,
@@ -33,7 +32,7 @@ import { createSplAssociatedTokenProgram, createSplTokenProgram } from "@metaple
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { fetchCandyMachine, getMplCandyMachineCoreProgram, mplCandyMachine } from "@metaplex-foundation/mpl-candy-machine"
 import { walletAdapterIdentity as Umidapter } from "@metaplex-foundation/umi-signer-wallet-adapters"
-
+import ProgressBar from "@ramonak/react-progress-bar";
 
 export default function Home() {
   const wallet = useWallet()
@@ -262,6 +261,38 @@ export default function Home() {
       : "Price: 2.19 SOL"
     : "..."
 
+    // const { data } = candyMachine ? candyMachine : ;
+
+  const itemsMinted = (candyMachine: any) => {
+    if (!candyMachine) {
+      return 0;
+    }
+
+    const { itemsMinted } = candyMachine;
+    const { words } = itemsMinted;
+    const [total] = words;
+
+    return parseInt(total);
+  };
+
+  const totalItems = (candyMachine: any) => {
+    if (!candyMachine) {
+      return 0;
+    }
+
+    const { itemsAvailable } = candyMachine;
+    const { words } = itemsAvailable;
+    const [total] = words;
+
+    return parseInt(total);
+  };
+
+  const minted = itemsMinted(candyMachine);
+  const total = totalItems(candyMachine);
+
+  const completed = (minted / total) * 100;
+
+  const label = `Total minted: ${minted} / ${total}`
   return (
     <>
       <Head>
@@ -308,13 +339,12 @@ export default function Home() {
             <p style={{ color: "#807a82", marginBottom: "32px" }}>
               More about Rubians <a href="https://zenwiki.gitbook.io/zen-republic-wiki/nft-collections/rubians" style={{ color: "#007bff", textDecoration: "underline" }}>here</a>
             </p>
-            <br></br>
-            <p>
-              {/* candyMachine.data.itemsAvailable; // Total number of NFTs available.
-              candyMachine.itemsRedeemed; // Number of NFTs minted. */}
 
-              <ProgressBar customLabel="total sold" completed={60} />
+            <br></br>
+            <p style={{textAlign: "center"}}>
+              {label}
             </p>
+            <ProgressBar labelAlignment="center" customLabelStyles={{display: "none"}} completed={completed} />
 
             <div
               style={{
