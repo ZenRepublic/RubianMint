@@ -27,7 +27,7 @@ import {
   signAllTransactions,
 } from "@metaplex-foundation/umi";
 import base58 from "bs58";
-import { createTokenMintTxs,createOpenMintTxs } from "@/utils/candymachine"
+import { createTokenMintTxs,createOpenMintTxs,createCouponMintTxs } from "@/utils/candymachine"
 import { createSplAssociatedTokenProgram, createSplTokenProgram } from "@metaplex-foundation/mpl-toolbox"
 import { createUmi } from "@metaplex-foundation/umi-bundle-defaults"
 import { fetchCandyMachine, getMplCandyMachineCoreProgram, mplCandyMachine } from "@metaplex-foundation/mpl-candy-machine"
@@ -202,6 +202,56 @@ export default function Home() {
       }, 5000)
     }
   }
+
+  /** Mints NFTs through a Candy Machine using Candy Guards */
+  const handleCouponMintV2 = async () => {
+  // if (!metaplex || !candyMachine || !publicKey || !candyMachine.candyGuard) {
+  //   if (!candyMachine?.candyGuard)
+  //     throw new Error(
+  //       "This app only works with Candy Guards. Please setup your Guards through Sugar."
+  //     )
+
+  //   throw new Error(
+  //     "Couldn't find the Candy Machine or the connection is not defined."
+  //   )
+  // }
+
+  try {
+    setIsLoading(true)
+
+    const umi = createUmi(connection.rpcEndpoint);
+    umi.use(Umidapter(wallet));
+    umi.use(mplCandyMachine());
+    umi.programs.add(getMplCandyMachineCoreProgram(umi));
+    umi.programs.add(createSplAssociatedTokenProgram());
+    umi.programs.add(createSplTokenProgram());
+
+    const transactions = await createCouponMintTxs(umi);
+
+    const sigs = await sendTransactions(umi, transactions);
+
+    await confirmTransactions(umi, sigs);
+
+    console.log(base58Signature(sigs[0]));
+
+    setFormMessage("Minted successfully!  ")
+  } catch (e: any) {
+    const msg = fromTxError(e)
+
+    if (msg) {
+      setFormMessage(msg.message)
+    } else {
+      const msg = e.message || e.toString()
+      setFormMessage(msg)
+    }
+  } finally {
+    setIsLoading(false)
+
+    setTimeout(() => {
+      setFormMessage(null)
+    }, 5000)
+  }
+}
 
   /** Mints NFTs through a Candy Machine using Candy Guards */
   const handleTokenMintV2 = async () => {
@@ -381,6 +431,11 @@ export default function Home() {
               <button disabled={!publicKey || isLoading} onClick={handleTokenMintV2}>
                 {isLoading ? "Minting Rubian..." : "Use Voucher (Free)"}
               </button>
+              <br></br>
+              <button disabled={!publicKey || isLoading} onClick={handleCouponMintV2}>
+                {isLoading ? "Minting Rubian..." : "Use 50% Off Coupon"}
+              </button>
+              
               <WalletMultiButton
                 style={{
                   width: "100%",
