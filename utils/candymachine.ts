@@ -26,7 +26,8 @@ import {
   );
 
   const tokenMint = publicKey(
-    "ESyHCUfKeT1ffLNRfCsjyHzNL4qN22kruVr8vYkPDR5r"
+    // "ESyHCUfKeT1ffLNRfCsjyHzNL4qN22kruVr8vYkPDR5r"
+    "devKak33fTumfvB547eEpGn2HYZstHZ9HjpFoLSELVH"
   );
 
   const couponMint = publicKey(
@@ -60,9 +61,10 @@ import {
         tokenStandard: TokenStandard.ProgrammableNonFungible,
         // group:some("default"),
         mintArgs: {
-            solPayment: {
-            destination: fundReceiver,
-            },
+            // solPayment: {
+            // destination: fundReceiver,
+            // },
+            tokenBurn: some({mint: tokenMint}),
         },
         })
     );
