@@ -21,7 +21,8 @@ import {
   import bs58 from "bs58";
 
   const candyMachine = publicKey(
-    "CiAnxgxAtM1pTdNoeZ8nqeTYBM5mPEdQHdwhXfqeS3Th"
+    // "CiAnxgxAtM1pTdNoeZ8nqeTYBM5mPEdQHdwhXfqeS3Th"
+    "AyHSw2Xxra5zpf5ycsLFzjAYcDDLs4iGWuLMoXFR3bMA"
   );
 
   const tokenMint = publicKey(
