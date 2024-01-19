@@ -21,13 +21,13 @@ import {
   import bs58 from "bs58";
 
   const candyMachine = publicKey(
-    // "CiAnxgxAtM1pTdNoeZ8nqeTYBM5mPEdQHdwhXfqeS3Th"
-    "AyHSw2Xxra5zpf5ycsLFzjAYcDDLs4iGWuLMoXFR3bMA"
+    "CiAnxgxAtM1pTdNoeZ8nqeTYBM5mPEdQHdwhXfqeS3Th"
+    // "AyHSw2Xxra5zpf5ycsLFzjAYcDDLs4iGWuLMoXFR3bMA"
   );
 
   const tokenMint = publicKey(
-    // "ESyHCUfKeT1ffLNRfCsjyHzNL4qN22kruVr8vYkPDR5r"
-    "devKak33fTumfvB547eEpGn2HYZstHZ9HjpFoLSELVH"
+    "ESyHCUfKeT1ffLNRfCsjyHzNL4qN22kruVr8vYkPDR5r"
+    // "devKak33fTumfvB547eEpGn2HYZstHZ9HjpFoLSELVH"
   );
 
   const couponMint = publicKey(
@@ -59,12 +59,11 @@ import {
         collectionUpdateAuthority: fundReceiver,
         nftMint: nftMint,
         tokenStandard: TokenStandard.ProgrammableNonFungible,
-        // group:some("default"),
+        group:some("open"),
         mintArgs: {
-            // solPayment: {
-            // destination: fundReceiver,
-            // },
-            tokenBurn: some({mint: tokenMint}),
+            solPayment: {
+            destination: fundReceiver,
+            },
         },
         })
     );

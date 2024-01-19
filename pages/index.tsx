@@ -432,9 +432,9 @@ export default function Home() {
                 {isLoading ? "Minting Rubian..." : "Use Voucher (Free)"}
               </button>
               <br></br>
-              <button disabled={!publicKey || isLoading} onClick={handleCouponMintV2}>
+              {/* <button disabled={!publicKey || isLoading} onClick={handleCouponMintV2}>
                 {isLoading ? "Minting Rubian..." : "Use 50% Off Coupon"}
-              </button>
+              </button> */}
               
               <WalletMultiButton
                 style={{
