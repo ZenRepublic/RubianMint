@@ -58,7 +58,7 @@ import {
         collectionUpdateAuthority: fundReceiver,
         nftMint: nftMint,
         tokenStandard: TokenStandard.ProgrammableNonFungible,
-        group:some("default"),
+        // group:some("default"),
         mintArgs: {
             solPayment: {
             destination: fundReceiver,
