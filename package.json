@@ -13,7 +13,7 @@
     "*.{ts,tsx}": "prettier --write"
   },
   "dependencies": {
-    "@metaplex-foundation/beet": "^0.7.1",
+    "@metaplex-foundation/beet": "^0.7.2",
     "@metaplex-foundation/js": "^0.18.3",
     "@metaplex-foundation/mpl-candy-guard": "^0.4.1",
     "@metaplex-foundation/mpl-candy-machine": "^6.0.0-alpha.16",
@@ -41,6 +41,7 @@
     "typescript": "5.0.3"
   },
   "devDependencies": {
+    "@types/bn.js": "^5.1.5",
     "husky": "^8.0.0",
     "lint-staged": "^13.2.2",
     "prettier": "^2.8.8"
