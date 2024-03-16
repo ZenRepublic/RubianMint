@@ -22,7 +22,7 @@ import {
 
   const candyMachine = publicKey(
     "CiAnxgxAtM1pTdNoeZ8nqeTYBM5mPEdQHdwhXfqeS3Th"
-    // "AyHSw2Xxra5zpf5ycsLFzjAYcDDLs4iGWuLMoXFR3bMA"
+    // "EPDMTLPBkidL1fXamZUXG9Yp4ZSVsg4QpWdPsKuVUx32"
   );
 
   const tokenMint = publicKey(
@@ -31,7 +31,7 @@ import {
   );
 
   const couponMint = publicKey(
-    "F5GmVdKrwdBUgBwKXLVjcd57WBVaVvsiX89kVNmHyfPP"
+    "2jVEPco6pMAzKG4RijGyarXZcJGuDNZ2ATAjve9dbKc1"
   );
 
   const fundReceiver = publicKey("rbyDXhzsM2xXtV3t9aayYR3md9rY6gyBxbQBeLThtSC");

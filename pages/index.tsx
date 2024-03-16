@@ -225,9 +225,7 @@ export default function Home() {
     umi.programs.add(getMplCandyMachineCoreProgram(umi));
     umi.programs.add(createSplAssociatedTokenProgram());
     umi.programs.add(createSplTokenProgram());
-
     const transactions = await createCouponMintTxs(umi);
-
     const sigs = await sendTransactions(umi, transactions);
 
     await confirmTransactions(umi, sigs);
@@ -277,6 +275,8 @@ export default function Home() {
       umi.programs.add(createSplTokenProgram());
   
       const transactions = await createTokenMintTxs(umi);
+      await umi.rpc.getLatestBlockhash()
+      console.log("TEST1")
       console.log(transactions[0]);
       const sigs = await sendTransactions(umi, transactions);
       console.log(sigs[0]);
@@ -388,7 +388,7 @@ export default function Home() {
               {collection?.json?.description}
             </p>
             <p style={{ color: "#807a82", marginBottom: "32px" }}>
-              More about Rubians <a href="https://zenwiki.gitbook.io/zen-republic-wiki/nft-collections/rubians" style={{ color: "#007bff", textDecoration: "underline" }}>here</a>
+              More about Rubians <a href="https://www.bento.me/rubians" style={{ color: "#007bff", textDecoration: "underline" }}>here</a>
             </p>
 
             {/* <p style={{textAlign: "center"}}>
@@ -432,9 +432,9 @@ export default function Home() {
                 {isLoading ? "Minting Rubian..." : "Use Voucher (Free)"}
               </button>
               <br></br>
-              {/* <button disabled={!publicKey || isLoading} onClick={handleCouponMintV2}>
-                {isLoading ? "Minting Rubian..." : "Use 50% Off Coupon"}
-              </button> */}
+              <button disabled={!publicKey || isLoading} onClick={handleCouponMintV2}>
+                {isLoading ? "Minting Rubian..." : "Use 25% Off Coupon"}
+              </button>
               
               <WalletMultiButton
                 style={{
@@ -517,3 +517,33 @@ export const confirmTransactions = async (
 export const base58Signature = (sig: Uint8Array) => {
   return base58.encode(sig);
 };
+
+// export const confirmTransactions = async (
+//   umi: Umi,
+//   signatures: Uint8Array[]
+// ) => {
+//   console.log("Starting confirmTransactions function...");
+//   try {
+//     const confirmations = await Promise.all(
+//       signatures.map(async (sig) => {
+//         console.log("Processing signature:", sig);
+//         const latestBlockhash = await umi.rpc.getLatestBlockhash();
+//         console.log("Latest blockhash:", latestBlockhash);
+//         const confirmation = await umi.rpc.confirmTransaction(sig, {
+//           strategy: {
+//             type: "blockhash",
+//             ...latestBlockhash,
+//           },
+//           commitment: "finalized",
+//         });
+//         console.log("Confirmation:", confirmation);
+//         return confirmation;
+//       })
+//     );
+//     console.log("All transactions confirmed.");
+//     return confirmations;
+//   } catch (error) {
+//     console.error("Error in confirmTransactions:", error);
+//     throw error;
+//   }
+// };
