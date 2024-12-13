@@ -44,8 +44,8 @@ export const createOpenMintTxs = async (umi: Umi) => {
 
   const nftMint = generateSigner(umi)
   const txBuilder = new TransactionBuilder()
-    .add(setComputeUnitPrice(umi, { lamports: sol(0.005) }))
-    .add(setComputeUnitLimit(umi, { units: 30000000 }))
+    .add(setComputeUnitPrice(umi, { lamports: sol(0.00005) }))
+    .add(setComputeUnitLimit(umi, { units: 800000 }))
     // .add(
     //   createMintWithAssociatedToken(umi, {
     //     mint: nftMint,
@@ -60,7 +60,7 @@ export const createOpenMintTxs = async (umi: Umi) => {
         collectionUpdateAuthority: fundReceiver,
         nftMint: nftMint,
         tokenStandard: TokenStandard.ProgrammableNonFungible,
-        group: some("open"),
+        group: some("base"),
         mintArgs: {
           solPayment: {
             destination: fundReceiver,

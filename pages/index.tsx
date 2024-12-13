@@ -360,7 +360,7 @@ export default function Home() {
         <title>Rubians by Zen Republic</title>
         <meta
           name="description"
-          content="Rubians are 720 fun and creative citizens of Ruby Planet, shaping the culture of web3"
+          content="Exclusive NFT community of 720 web3 gaming innovators. Comes with a unique utility of managing games the brand develops!"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
@@ -452,7 +452,7 @@ export default function Home() {
               >
                 {isLoading ? "Minting Rubian..." : "Mint"}
               </button>
-              <br></br>
+              {/* <br></br>
               <button
                 disabled={!publicKey || isLoading}
                 onClick={handleTokenMintV2}
@@ -465,7 +465,7 @@ export default function Home() {
                 onClick={handleCouponMintV2}
               >
                 {isLoading ? "Minting Rubian..." : "Use 25% Off Coupon"}
-              </button>
+              </button> */}
 
               <WalletMultiButton
                 style={{
